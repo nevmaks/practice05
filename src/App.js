@@ -1,6 +1,6 @@
 import './App.css';
 
-import React, { useState, cloneElement } from "react";
+import React, { cloneElement, memo, useCallback, useState } from "react";
 import PropTypes from "prop-types";
 
 const dataSource = [
@@ -9,12 +9,12 @@ const dataSource = [
     {firstName: "Peter", lastName: "Noname", active: true}
 ];
 
-function GridRecord (props) {
+function GridRecord ({record, toggleActive, index}) {
     return (
         <tr>
-            <td>{props.record.firstName}</td>
-            <td>{props.record.lastName}</td>
-            <td><input type="checkbox" checked={props.record.active} onChange={props.toggleActive}/></td>
+            <td>{record.firstName}</td>
+            <td>{record.lastName}</td>
+            <td><input type="checkbox" checked={record.active} onChange={() => toggleActive(index)}/></td>
         </tr>
     )
 }
@@ -30,6 +30,8 @@ GridRecord.propTypes = {
 GridRecord.defaultProps = {
     record: {firstName: "N/A", lastName: "N/A", active: false}
 }
+
+const MemoGridRecord = memo(GridRecord);
 
 function SummaryActive(props) {
     return (
@@ -60,8 +62,10 @@ function GridComponent({children}) {
         );
     }
 
+    const toggle = useCallback(toggleActive, []);
+
     let recordsGrid = records.map((record, index) => {
-        return <GridRecord record={record} key={index} toggleActive={ () => toggleActive(index)} />
+        return <MemoGridRecord record={record} key={index} index={index} toggleActive={ toggle } />
     });
 
     return (
