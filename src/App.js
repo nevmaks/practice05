@@ -1,6 +1,6 @@
 import './App.css';
 
-import React, { useState } from "react";
+import React, { useState, cloneElement } from "react";
 import PropTypes from "prop-types";
 
 const dataSource = [
@@ -31,12 +31,24 @@ GridRecord.defaultProps = {
     record: {firstName: "N/A", lastName: "N/A", active: false}
 }
 
-function GridComponent() {
+function SummaryActive(props) {
+    return (
+        <div>Active Users: {props.records.filter((record) => record.active).length}</div>
+    );
+}
+
+function SummaryUsers(props) {
+    return (
+        <div>User Count: {props.records.length}</div>
+    );
+}
+
+function GridComponent({children}) {
     const [records, setRecords] = useState(dataSource);
 
     function toggleActive(index) {
-        records[index] = { ...records[index], active: !records[index].active };
-        setRecords([...records]);
+        dataSource[index] = { ...dataSource[index], active: !dataSource[index].active };
+        setRecords([...dataSource]);
     }
 
     function handleFilterChange(e) {
@@ -69,12 +81,17 @@ function GridComponent() {
                 {recordsGrid}
                 </tbody>
             </table>
+            <div>{ children && cloneElement( children, { records: records })}</div>
         </div>
     );
 }
 
 function App() {
-    return <GridComponent />
+    return (
+        <GridComponent>
+            <SummaryActive />
+        </GridComponent>
+    );
 }
 
 export default App;
