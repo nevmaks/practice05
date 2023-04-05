@@ -1,6 +1,6 @@
 import './App.css';
 
-import React, { cloneElement, memo, useCallback, useState } from "react";
+import React, { cloneElement, memo, useCallback, useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 
 const dataSource = [
@@ -46,6 +46,12 @@ function SummaryUsers(props) {
 }
 
 function GridComponent({children}) {
+    let filterInput = useRef(null);
+
+    useEffect(() => {
+        filterInput.current.focus();
+    }, []);
+
     const [records, setRecords] = useState(dataSource);
 
     function toggleActive(index) {
@@ -71,7 +77,7 @@ function GridComponent({children}) {
     return (
         <div style={{width: 300, height: 300, padding:20}}>
             <p>
-                <input type="text" placeholder="Filter by..." onChange={handleFilterChange}/>
+                <input type="text" ref={filterInput} placeholder="Filter by..." onChange={handleFilterChange}/>
             </p>
             <table className="table table-condensed">
                 <thead>
