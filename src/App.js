@@ -1,13 +1,19 @@
 import './App.css';
+import React from "react";
 
-import {SummaryActive} from "./summaries";
 import GridComponent from "./grid";
+import UserDetails from "./user-details";
+import {SummaryActive, SummaryUsers} from "./summaries";
 
 function App() {
     return (
-        <GridComponent>
-            <SummaryActive />
-        </GridComponent>
+        <React.Fragment>
+            <GridComponent>
+                <SummaryActive />
+                <SummaryUsers />
+            </GridComponent>,
+            <UserDetails />
+        </React.Fragment>
     );
 }
 

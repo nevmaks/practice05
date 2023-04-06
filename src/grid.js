@@ -42,7 +42,7 @@ export default function GridComponent({children}) {
 
     function toggleActive(index) {
         dataSource[index] = { ...dataSource[index], active: !dataSource[index].active };
-        setRecords([...dataSource]);
+        setRecords([...records]);
     }
 
     const toggle = useCallback(toggleActive, []);
@@ -77,7 +77,8 @@ export default function GridComponent({children}) {
                 {recordsGrid}
                 </tbody>
             </table>
-            <div>{ children && cloneElement( children, { records: records })}</div>
+            <div>{ children[0] && cloneElement( children[0], { records: records })}</div>
+            <div>{ children[1] && cloneElement( children[1], { records: records })}</div>
         </div>
     );
 }
