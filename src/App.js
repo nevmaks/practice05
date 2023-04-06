@@ -7,13 +7,13 @@ import {SummaryActive, SummaryUsers} from "./summaries";
 
 function App() {
     return (
-        <React.Fragment>
+        <>
             <GridComponent>
                 <SummaryActive />
                 <SummaryUsers />
-            </GridComponent>,
+            </GridComponent>
             <UserDetails />
-        </React.Fragment>
+        </>
     );
 }
 

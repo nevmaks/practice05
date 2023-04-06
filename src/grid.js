@@ -2,9 +2,9 @@ import PropTypes from "prop-types";
 import React, {cloneElement, memo, useCallback, useEffect, useRef, useState} from "react";
 
 const dataSource = [
-    {firstName: "John", lastName: "Doe", active: false},
-    {firstName: "Mary", lastName: "Moe", active: false},
-    {firstName: "Peter", lastName: "Noname", active: true}
+    {id: 1, firstName: "John", lastName: "Doe", active: false},
+    {id: 2, firstName: "Mary", lastName: "Moe", active: false},
+    {id: 3, firstName: "Peter", lastName: "Noname", active: true}
 ];
 
 function GridRecord ({record, toggleActive, index}) {
@@ -21,6 +21,7 @@ const MemoGridRecord = memo(GridRecord);
 
 GridRecord.propTypes = {
     record: PropTypes.shape({
+        id: PropTypes.number.isRequired,
         firstName: PropTypes.string.isRequired,
         lastName: PropTypes.string.isRequired,
         active: PropTypes.bool.isRequired
@@ -42,10 +43,8 @@ export default function GridComponent({children}) {
 
     function toggleActive(index) {
         dataSource[index] = { ...dataSource[index], active: !dataSource[index].active };
-        setRecords([...records]);
+        setRecords([...dataSource]);
     }
-
-    const toggle = useCallback(toggleActive, []);
 
     function handleFilterChange(e) {
         let value = e.target.value;
@@ -55,6 +54,8 @@ export default function GridComponent({children}) {
             )
         );
     }
+
+    const toggle = useCallback(toggleActive,[]);
 
     let recordsGrid = records.map((record, index) => {
         return <MemoGridRecord record={record} key={index} index={index} toggleActive={ toggle } />
@@ -77,8 +78,9 @@ export default function GridComponent({children}) {
                 {recordsGrid}
                 </tbody>
             </table>
-            <div>{ children[0] && cloneElement( children[0], { records: records })}</div>
-            <div>{ children[1] && cloneElement( children[1], { records: records })}</div>
+            <div>
+                {React.Children.map(children, (child) => cloneElement(child, { records: records }))}
+            </div>
         </div>
     );
 }
